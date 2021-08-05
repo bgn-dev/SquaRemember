@@ -1,16 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class main : MonoBehaviour
+public class MainGame : MonoBehaviour
 { 
     [SerializeField] private int rows = 3;
     [SerializeField] private int cols = 3;
     [SerializeField] private float squareSize = 1;
     public GameObject square;
-    Queue sQ = new Queue();
-    List<string> squares = new List<string>();
-    int round = 13;
+    private Queue<int> sQ = new Queue<int>();
+    private List<string> squares = new List<string>();
+    private int round = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -27,14 +28,31 @@ public class main : MonoBehaviour
             var worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Collider2D collider = Physics2D.OverlapPoint(worldPoint);
 
-
             if (collider != null)
             {
-                Debug.Log(collider.gameObject.GetInstanceID());
-                collider.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.green;
+                if (collider.gameObject.name == squares[sQ.Dequeue()])
+                {
+                    StartCoroutine(changeColor(collider));
+                    if (sQ.Count == 0)
+                    {
+                        round++;
+                        StartCoroutine(startRound());
+                    }
+                }
+                else
+                {
+                    collider.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+                    SceneManager.LoadScene(0);
+                }
             }
-
         }
+    }
+
+    IEnumerator changeColor(Collider2D collider)
+    {
+        collider.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.green;
+        yield return new WaitForSeconds(1);
+        collider.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
     }
 
     private void GenerateGrid()
@@ -46,8 +64,6 @@ public class main : MonoBehaviour
             for (int col = 0; col < cols; col++)
             {
                 GameObject square = (GameObject)Instantiate(referenceSquare, transform);
-
-                
 
                 float posX = col * squareSize;
                 float posY = row * -squareSize;
@@ -70,9 +86,10 @@ public class main : MonoBehaviour
         for (int i = 0; i < round; i++)
         {
             int rnd = Random.Range(0, 9);
-            GameObject.Find(squares[rnd]).GetComponent<SpriteRenderer>().color = Color.red;
+            GameObject.Find(squares[rnd]).GetComponent<SpriteRenderer>().color = Color.blue;
             yield return new WaitForSeconds(1);
             GameObject.Find(squares[rnd]).GetComponent<SpriteRenderer>().color = Color.white;
+            sQ.Enqueue(rnd);
         }
     }
 }
