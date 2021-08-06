@@ -12,6 +12,9 @@ public class MainGame : MonoBehaviour
     private Queue<int> sQ = new Queue<int>();
     private List<string> squares = new List<string>();
     private int round = 1;
+    // keyword "static" makes this variable a member of the class, not of any particular instance
+    public int score = 0;
+    public static int highScore = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -36,15 +39,26 @@ public class MainGame : MonoBehaviour
                     if (sQ.Count == 0)
                     {
                         round++;
+                        score++;
                         StartCoroutine(startRound());
                     }
                 }
                 else
                 {
                     collider.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+                    UpdateHighScore();
+                    Debug.Log(highScore);
                     SceneManager.LoadScene(0);
                 }
             }
+        }
+    }
+
+    public void UpdateHighScore()
+    {
+        if (score > highScore)
+        {
+            highScore = score;
         }
     }
 
