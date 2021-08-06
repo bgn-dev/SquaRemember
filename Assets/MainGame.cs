@@ -2,18 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainGame : MonoBehaviour
-{ 
+{
+    private Queue<int> sQ = new Queue<int>();
+    private List<string> squares = new List<string>();
+
+    public GameObject square;
+
+    public Text scoreText;
+
     [SerializeField] private int rows = 3;
     [SerializeField] private int cols = 3;
     [SerializeField] private float squareSize = 1;
-    public GameObject square;
-    private Queue<int> sQ = new Queue<int>();
-    private List<string> squares = new List<string>();
+
     private int round = 1;
+    private int score = 0;
     // keyword "static" makes this variable a member of the class, not of any particular instance
-    public int score = 0;
     public static int highScore = 0;
 
     // Start is called before the first frame update
@@ -40,6 +46,7 @@ public class MainGame : MonoBehaviour
                     {
                         round++;
                         score++;
+                        scoreText.text = score.ToString();
                         StartCoroutine(startRound());
                     }
                 }
@@ -47,7 +54,6 @@ public class MainGame : MonoBehaviour
                 {
                     collider.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
                     UpdateHighScore();
-                    Debug.Log(highScore);
                     SceneManager.LoadScene(0);
                 }
             }
