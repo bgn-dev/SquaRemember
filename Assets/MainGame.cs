@@ -25,6 +25,8 @@ public class MainGame : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // is enabled set to false, the void update function will not called
+        enabled = false;
         GenerateGrid();
         StartCoroutine(startRound());
     }
@@ -48,6 +50,8 @@ public class MainGame : MonoBehaviour
                         score++;
                         scoreText.text = score.ToString();
                         StartCoroutine(startRound());
+                        // set enabled to false, so the new round can be shown to the player
+                        enabled = false;
                     }
                 }
                 else
@@ -111,5 +115,7 @@ public class MainGame : MonoBehaviour
             GameObject.Find(squares[rnd]).GetComponent<SpriteRenderer>().color = Color.white;
             sQ.Enqueue(rnd);
         }
+        // set enabled to true, so the player can select the squares
+        enabled = true;
     }
 }
