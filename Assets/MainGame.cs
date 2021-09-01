@@ -18,7 +18,6 @@ public class MainGame : MonoBehaviour
     [SerializeField] private float squareSize = 1;
 
     private int round = 1;
-    private int score = 0;
     // keyword "static" makes this variable a member of the class, not of any particular instance
     public static int highScore = 0;
 
@@ -47,8 +46,7 @@ public class MainGame : MonoBehaviour
                     if (sQ.Count == 0)
                     {
                         round++;
-                        score++;
-                        scoreText.text = score.ToString();
+                        scoreText.text = (round-1).ToString();
                         StartCoroutine(startRound());
                         // set enabled to false, so the new round can be shown to the player
                         enabled = false;
@@ -59,6 +57,7 @@ public class MainGame : MonoBehaviour
                     collider.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
                     UpdateHighScore();
                     SceneManager.LoadScene(0);
+                    
                 }
             }
         }
@@ -66,9 +65,9 @@ public class MainGame : MonoBehaviour
 
     public void UpdateHighScore()
     {
-        if (score > highScore)
+        if (round - 1 > highScore)
         {
-            highScore = score;
+            highScore = round - 1;
         }
     }
 
@@ -118,4 +117,5 @@ public class MainGame : MonoBehaviour
         // set enabled to true, so the player can select the squares
         enabled = true;
     }
+
 }
