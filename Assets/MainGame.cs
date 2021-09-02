@@ -18,6 +18,7 @@ public class MainGame : MonoBehaviour
     [SerializeField] private float squareSize = 1;
 
     private int round = 1;
+    private float speed = 1.0F;
     // keyword "static" makes this variable a member of the class, not of any particular instance
     public static int highScore = 0;
 
@@ -106,16 +107,20 @@ public class MainGame : MonoBehaviour
 
     IEnumerator startRound()
     {
+        yield return new WaitForSeconds(1);
         for (int i = 0; i < round; i++)
         {
             int rnd = Random.Range(0, 9);
             GameObject.Find(squares[rnd]).GetComponent<SpriteRenderer>().color = Color.blue;
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(speed);
             GameObject.Find(squares[rnd]).GetComponent<SpriteRenderer>().color = Color.white;
+            yield return new WaitForSeconds(0.2F);
             sQ.Enqueue(rnd);
         }
         // set enabled to true, so the player can select the squares
         enabled = true;
+
+        speed = speed - Mathf.Sqrt(0.02F * 1/10);
     }
 
 }
