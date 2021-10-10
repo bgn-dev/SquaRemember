@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class MainMenu : MonoBehaviour
 {
-    public Text HighScore;
+    public TextMeshProUGUI HighScore;
     public void Start()
     {
         HighScore.text = PlayerPrefs.GetInt("Score", 0).ToString();
@@ -16,7 +17,10 @@ public class MainMenu : MonoBehaviour
     }
     public void PlayGame()
     {
-        SceneManager.LoadScene(1);
+        //lädt Spielszene, Menü wird nicht entladen
+        //SceneManager.LoadScene(1,LoadSceneMode.Additive);
+        MainGame.game = true;
+        
     }
 
     public void QuitGame()

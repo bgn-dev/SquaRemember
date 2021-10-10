@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class MainGame : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class MainGame : MonoBehaviour
 
     public GameObject square;
 
-    public Text scoreText;
+    public TextMeshProUGUI scoreText;
 
     [SerializeField] private int rows = 3;
     [SerializeField] private int cols = 3;
@@ -21,12 +22,13 @@ public class MainGame : MonoBehaviour
     private float speed = 1.0F;
     // keyword "static" makes this variable a member of the class, not of any particular instance
     public static int highScore = 0;
-
+    public static bool game = false;
+    
     // Start is called before the first frame update
     void Start()
     {
-        // is enabled set to false, the void update function will not called
-        enabled = false;
+        // scene is paused
+        Time.timeScale = 0;
         GenerateGrid();
         StartCoroutine(startRound());
     }
@@ -34,31 +36,38 @@ public class MainGame : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (game)
         {
-            var worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Collider2D collider = Physics2D.OverlapPoint(worldPoint);
-
-            if (collider != null)
+            startGame();
+            if (Input.GetMouseButtonDown(0))
             {
-                if (collider.gameObject.name == squares[sQ.Dequeue()])
+                var worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Collider2D collider = Physics2D.OverlapPoint(worldPoint);
+
+                if (collider != null)
                 {
-                    StartCoroutine(changeColor(collider));
-                    if (sQ.Count == 0)
+                    if (collider.gameObject.name == squares[sQ.Dequeue()])
                     {
-                        round++;
-                        scoreText.text = (round-1).ToString();
-                        StartCoroutine(startRound());
-                        // set enabled to false, so the new round can be shown to the player
-                        enabled = false;
+                        StartCoroutine(changeColor(collider));
+                        if (sQ.Count == 0)
+                        {
+                            round++;
+                            scoreText.text = (round - 1).ToString();
+                            StartCoroutine(startRound());
+                            // set enabled to false, so the new round can be shown to the player
+                            enabled = false;
+                        }
                     }
-                }
-                else
-                {
-                    collider.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
-                    UpdateHighScore();
-                    SceneManager.LoadScene(0);
-                    
+                    else
+                    {
+                        collider.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+                        UpdateHighScore();
+                        // reload the game scene
+                        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                        // set to false, so the game does not start after the reload
+                        game = false;
+
+                    }
                 }
             }
         }
@@ -70,6 +79,11 @@ public class MainGame : MonoBehaviour
         {
             highScore = round - 1;
         }
+    }
+
+    public void startGame()
+    {
+        Time.timeScale = 1;
     }
 
     IEnumerator changeColor(Collider2D collider)
