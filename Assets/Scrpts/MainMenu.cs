@@ -17,8 +17,7 @@ public class MainMenu : MonoBehaviour
     }
     public void PlayGame()
     {
-        //lädt Spielszene, Menü wird nicht entladen
-        //SceneManager.LoadScene(1,LoadSceneMode.Additive);
+        // set the bool true, so the void update
         MainGame.game = true;
         
     }

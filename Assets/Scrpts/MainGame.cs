@@ -10,11 +10,11 @@ public class MainGame : MonoBehaviour
     private Queue<int> sQ = new Queue<int>();
     private List<string> squares = new List<string>();
 
-    public GameObject square;
-    public GameObject TapToPlayAgainT;
-    public GameObject CanvasAttachedTo;
+    [SerializeField] private GameObject square;
+    [SerializeField] private GameObject TapToPlayAgainT;
+    [SerializeField] private GameObject CanvasAttachedTo;
 
-    public TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI scoreText;
 
     [SerializeField] private int rows = 3;
     [SerializeField] private int cols = 3;
@@ -29,7 +29,7 @@ public class MainGame : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // scene is paused
+        // all the frames are paused
         Time.timeScale = 0;
         GenerateGrid();
         StartCoroutine(startRound());
@@ -40,7 +40,8 @@ public class MainGame : MonoBehaviour
     {
         if (game)
         {
-            startGame();
+            Time.timeScale = 1;
+
             if (Input.GetMouseButtonDown(0))
             {
                 var worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -63,6 +64,7 @@ public class MainGame : MonoBehaviour
                     else
                     {
                         collider.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+                        Handheld.Vibrate();
                         UpdateHighScore();
 
                         // Create a text after gameOver
@@ -104,11 +106,6 @@ public class MainGame : MonoBehaviour
         }
     }
 
-    private void startGame()
-    {
-        Time.timeScale = 1;
-    }
-
     private IEnumerator changeColor(Collider2D collider)
     {
         collider.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.green;
@@ -142,7 +139,7 @@ public class MainGame : MonoBehaviour
         transform.position = new Vector2(-gridW / 2 + squareSize / 2, gridH / 2 - squareSize / 2);
     }
 
-    IEnumerator startRound()
+    private IEnumerator startRound()
     {
         yield return new WaitForSeconds(1);
         for (int i = 0; i < round; i++)
