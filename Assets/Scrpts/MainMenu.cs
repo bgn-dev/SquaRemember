@@ -17,7 +17,7 @@ public class MainMenu : MonoBehaviour
     }
     public void PlayGame()
     {
-        // set the bool true, so the void update
+        // set the bool true, which is checked every frame in void update
         MainGame.game = true;
         
     }

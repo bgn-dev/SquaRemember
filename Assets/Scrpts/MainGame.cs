@@ -68,7 +68,7 @@ public class MainGame : MonoBehaviour
                         UpdateHighScore();
 
                         // Create a text after gameOver
-                        GameObject playAgainT = (GameObject)Instantiate(TapToPlayAgainT);
+                        GameObject playAgainT = (GameObject) Instantiate(TapToPlayAgainT);
                         // assign it to its parent
                         playAgainT.transform.SetParent(CanvasAttachedTo.transform);
                         // set right position
@@ -92,6 +92,8 @@ public class MainGame : MonoBehaviour
             // wait for the actual frame to end, avoid overloads
             yield return null;
         }
+        // wait 
+        yield return new WaitForSeconds(0.2F);
         // load the active scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         yield return null;
