@@ -6,6 +6,7 @@ using TMPro;
 public class MainMenu : MonoBehaviour
 {
     public TextMeshProUGUI HighScore;
+    
     public void Start()
     {
         HighScore.text = PlayerPrefs.GetInt("Score", 0).ToString();
@@ -15,6 +16,7 @@ public class MainMenu : MonoBehaviour
     {
         UpdateHighScore();
     }
+
     public void PlayGame()
     {
         // set the bool true, which is checked every frame in void update

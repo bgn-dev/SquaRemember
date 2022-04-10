@@ -8,7 +8,6 @@ using TMPro;
 public class MainGame : MonoBehaviour
 {
     private Queue<int> sQ = new Queue<int>();
-    private List<string> squares = new List<string>();
 
     [SerializeField] private GameObject square;
     [SerializeField] private GameObject TapToPlayAgainT;
@@ -26,16 +25,21 @@ public class MainGame : MonoBehaviour
     public static int highScore = 0;
     public static bool game = false;
     
-    // Start is called before the first frame update
+    /* Start is called before the first frame update
+    * @param timeScale: 0 the game is paused, 1 the game is in normal speed
+    */
     void Start()
     {
-        // all the frames are paused
         Time.timeScale = 0;
         GenerateGrid();
-        StartCoroutine(startRound());
+        StartCoroutine(StartRound());
     }
 
-    // Update is called once per frame
+    /* Update is called once per frame
+    * @param game boolean used to avoid the functionality of the method, until the game is started
+    * @param worldPoint is a vector which is created by the input of the mouse
+    * @param enabled boolean toggles the method Update
+    */
     void Update()
     {
         if (game)
@@ -49,15 +53,14 @@ public class MainGame : MonoBehaviour
 
                 if (collider != null && sQ.Count != 0)
                 {
-                    if (collider.gameObject.name == squares[sQ.Dequeue()])
+                    if (collider.gameObject.name == sQ.Dequeue().ToString())
                     {
-                        StartCoroutine(changeColor(collider));
+                        StartCoroutine(ChangeColor(collider.transform.gameObject.GetComponent<SpriteRenderer>(), Color.green, 1));
                         if (sQ.Count == 0)
                         {
                             round++;
                             scoreText.text = (round - 1).ToString();
-                            StartCoroutine(startRound());
-                            // set enabled to false, so the new round can be shown to the player without clicks getting accepted
+                            StartCoroutine(StartRound());
                             enabled = false;
                         }
                     }
@@ -67,23 +70,25 @@ public class MainGame : MonoBehaviour
                         Handheld.Vibrate();
                         UpdateHighScore();
 
-                        // Create a text after gameOver
+                        // Create a text after the game is lost
                         GameObject playAgainT = (GameObject) Instantiate(TapToPlayAgainT);
-                        // assign it to its parent
+                        // assign it to its parent canvas
                         playAgainT.transform.SetParent(CanvasAttachedTo.transform);
-                        // set right position
-                        playAgainT.transform.localPosition = new Vector3(-3, -147, 0);
-
+                        // set the right position
+                        playAgainT.transform.localPosition = new Vector3(0, -152, 0);
+                        enabled = false;
                         game = false;
-
-                        StartCoroutine(waitForInput()); 
+                        StartCoroutine(WaitForInput()); 
                     }
                 }
             }
         }
     }
 
-    private IEnumerator waitForInput()
+    /* waitForInput waits for an input, after the game is lost
+    * load the game scene, so its playable
+    */
+    private IEnumerator WaitForInput()
     {
         // wait for the actual frame to end, since Input.GetMouseButtonDown stays for an whole frame true
         yield return null;
@@ -94,12 +99,11 @@ public class MainGame : MonoBehaviour
         }
         // wait 
         yield return new WaitForSeconds(0.2F);
-        // load the active scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         yield return null;
-
     }
 
+    /* method is called, after the game is lost */
     public void UpdateHighScore()
     {
         if (round - 1 > highScore)
@@ -108,13 +112,24 @@ public class MainGame : MonoBehaviour
         }
     }
 
-    private IEnumerator changeColor(Collider2D collider)
+    /* method used to change the colors of the square
+    * @param spriteRenderer get acces to the color of the square
+    * @param sec past time between the color change
+    */
+    private IEnumerator ChangeColor(SpriteRenderer spriteRenderer, Color color, float sec)
     {
-        collider.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.green;
-        yield return new WaitForSeconds(1);
-        collider.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+        spriteRenderer.color = color;
+        yield return new WaitForSeconds(sec);
+        spriteRenderer.color = Color.white;
     }
 
+    /* GenerateGrid generates the grid
+    * @param rows number of row
+    * @param cols number of column
+    * create the square as an GameObject
+    * change the name of the created square
+    * set the right position
+    */
     private void GenerateGrid()
     {
         GameObject referenceSquare = Instantiate(square);
@@ -128,8 +143,7 @@ public class MainGame : MonoBehaviour
                 float posX = col * squareSize;
                 float posY = row * -squareSize;
 
-                square.name = "S" + i;
-                squares.Add("S" + i);
+                square.name = i.ToString();
                 square.transform.position = new Vector2(posX, posY);
                 i++;
             }
@@ -141,21 +155,24 @@ public class MainGame : MonoBehaviour
         transform.position = new Vector2(-gridW / 2 + squareSize / 2, gridH / 2 - squareSize / 2);
     }
 
-    private IEnumerator startRound()
+    /* StartRound called at the beginning of the method Start() and after every succesfull round
+    * @param squareAnzahl random number for the length of the round
+    * @param iSquare number of the selected square
+    * @param speed calculated the new speediness
+    */
+    private IEnumerator StartRound()
     {
         yield return new WaitForSeconds(1);
-        for (int i = 0; i < round; i++)
+        int squareAnzahl = Random.Range(0, 5);
+        for (int i = 0; i <= squareAnzahl; i++)
         {
-            int rnd = Random.Range(0, 9);
-            GameObject.Find(squares[rnd]).GetComponent<SpriteRenderer>().color = Color.blue;
-            yield return new WaitForSeconds(speed);
-            GameObject.Find(squares[rnd]).GetComponent<SpriteRenderer>().color = Color.white;
-            yield return new WaitForSeconds(0.2F);
-            sQ.Enqueue(rnd);
+            int iSquare = Random.Range(0, 9);
+            StartCoroutine(ChangeColor(GameObject.Find(iSquare.ToString()).GetComponent<SpriteRenderer>(), Color.blue, speed));
+            // wait until the method changeColor is "done", add 0.2ms for visibility if a square gets selected in mutilple times
+            yield return new WaitForSeconds(speed + 0.2F);
+            sQ.Enqueue(iSquare);
         }
-        // set enabled to true, so the player can select the squares
         enabled = true;
-
         speed = speed - Mathf.Sqrt(0.02F * 1/10);
     }
 
