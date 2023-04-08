@@ -67,7 +67,7 @@ public class MainGame : MonoBehaviour
                     else
                     {
                         collider.transform.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
-                        Handheld.Vibrate();
+                        // Handheld.Vibrate();
                         UpdateHighScore();
 
                         // Create a text after the game is lost
