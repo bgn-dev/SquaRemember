@@ -1,8 +1,6 @@
 # SquaRemember
 
-[![Bildschirmfoto-2023-09-10-um-14-26-04.png](https://i.postimg.cc/FKgHQFMB/Bildschirmfoto-2023-09-10-um-14-26-04.png)](https://postimg.cc/WDzvGVbG)
-[![Bildschirmfoto-2023-09-10-um-14-27-05.png](https://i.postimg.cc/bNsr2hnZ/Bildschirmfoto-2023-09-10-um-14-27-05.png)](https://postimg.cc/hfRcHNpn)
-[![Bildschirmfoto-2023-09-10-um-14-26-45.png](https://i.postimg.cc/RhP3xCHB/Bildschirmfoto-2023-09-10-um-14-26-45.png)](https://postimg.cc/fS9WxNC2)
+[![Bildschirmfoto-2023-09-10-um-14-26-04.png](https://i.postimg.cc/9MCYYp5N/Bildschirmfoto-2023-09-10-um-14-26-04.png)](https://postimg.cc/kVYSnW5x)
 
 🎉 Play a game where you need to remember the square 🎉
 
