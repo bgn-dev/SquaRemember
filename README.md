@@ -7,4 +7,4 @@
 ## Round
 
 - Each round can flash 1 to 5 squares
-- The flash time of the square will reduced every round
+- The flash time of the square will be reduced every round
