@@ -8,9 +8,13 @@
 [Uu]serData/
 [Ii]mport/
 [Aa][Ss][Ss][Ee][Tt]/
+SR_BurstDebugInformation_DoNotShip/
+beta.aab
+mono_crash.9adc8497e.0.json
 
 # Visual Studio cache
 .vscode/
+.vsconfig
 .idea/
 
 # User-specific files
