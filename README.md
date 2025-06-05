@@ -6,8 +6,8 @@ This is a memory game where you watch squares light up in a sequence and then ta
 
 ## Round
 
-- Each round can flash 1 to 5 squares
-- The flash time of the square will be reduced every round
+- Each round can light up 1 to 5 squares
+- Squares light up for shorter periods each round
 
 ## License
 
