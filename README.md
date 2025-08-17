@@ -1,3 +1,5 @@
+[![Project Status: Inactive](https://www.repostatus.org/badges/latest/inactive.svg)](https://www.repostatus.org/#inactive)
+
 # SquaRemember
 
 [![Bildschirmfoto-2023-09-10-um-14-26-04.png](https://i.postimg.cc/9MCYYp5N/Bildschirmfoto-2023-09-10-um-14-26-04.png)](https://postimg.cc/kVYSnW5x)
