@@ -11,6 +11,6 @@ This is a memory game where you watch squares light up in a sequence and then ta
 - Each round can light up 1 to 5 squares
 - Squares light up for shorter periods each round
 
-## License
+## 📄 License
 
-GNU GPLv3
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
